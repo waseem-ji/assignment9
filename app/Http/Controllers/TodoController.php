@@ -61,28 +61,24 @@ class TodoController extends Controller
      */
     public function show(Todo $todo)
     {
-        //
+        $todo = Todo::find($todo->id);
+        if ($todo->completed){
+            $todo->update(['completed' => false]);
+            return redirect()->back()->with('success', "TODO marked as incomplete!");
+        }else {
+            $todo->update(['completed' => true]);
+            return redirect()->back()->with('success', "TODO marked as complete!");
+        }
     }
 
-    /**
-     * Show the form for editing the specified resource.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
+
     public function edit($id)
     {
         $todo = Todo::find($id);
         return view('edit')->with(['id' => $id, 'task' => $todo]);
     }
 
-    /**
-     * Update the specified resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
+
     public function update(Request $request, Todo $todo)
     {
         $request->validate([
@@ -94,12 +90,7 @@ class TodoController extends Controller
         return redirect('dashboard')->with('success', "TODO updated successfully!");
     }
 
-    /**
-     * Remove the specified resource from storage.
-     *
-     * @param  \App\Models\Todo  $todo
-     * @return \Illuminate\Http\Response
-     */
+    
     public function delete($id){
         $todo = Todo::find($id);
         $todo->delete();
