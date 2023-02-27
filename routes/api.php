@@ -17,4 +17,10 @@ Route::post('register', [AuthController::class, 'signup']);
 
 Route::middleware('auth:sanctum')->group(function () {
     Route::resource('todos', TodoController::class);
+    Route::post('logout',[AuthController::class,'logout']);
 });
+
+// Route::middleware('auth:sanctum')->group(function () {
+//     // Route::resource('todos', TodoController::class);
+//     Route::post('logout',AuthController::class,'logout');
+// });

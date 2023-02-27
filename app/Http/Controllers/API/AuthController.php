@@ -15,14 +15,22 @@ class AuthController extends BaseController
     {
         if(Auth::attempt(['email' => $request->email, 'password' => $request->password])){
             $authUser = Auth::user();
-            $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
-            $success['name'] =  $authUser->name;
+            if(auth('sanctum')->check()){
+                $success['name'] =  $authUser->name;
 
-            return $this->sendResponse($success, 'User signed in');
+                $success['token'] =  $authUser->createToken('MyAuthApp')->plainTextToken;
+                return $this->sendResponse($success, 'User signed in');
+
+            }
+            else {
+                return $this->sendError('Unauthorised.', ['error'=>'Unauthorized']);
+
+            }
         }
         else{
             return $this->sendError('Unauthorised.', ['error'=>'Unauthorised']);
         }
+        // 16|Hf937OCXM2clIstYe037kZazZQjJvyDy3xQPNAAX
     }
     public function signup(Request $request)
     {
@@ -40,10 +48,25 @@ class AuthController extends BaseController
         $input = $request->all();
         $input['password'] = bcrypt($input['password']);
         $user = User::create($input);
+
         $success['token'] =  $user->createToken('MyAuthApp')->plainTextToken;
+        $updateUser = User::find($user->id);
+        // dd($updateUser);
+
         $success['name'] =  $user->name;
+
+        $updateUser->remember_token = $success['token'];
+        $updateUser->save();
 
         return $this->sendResponse($success, 'User created successfully.');
     }
 
+    public function logout(Request $request)
+    {
+        auth()->user()->currentAccessToken()->delete();
+
+        return [
+            "message"=>"Logged Out"
+        ];
+    }
 }
