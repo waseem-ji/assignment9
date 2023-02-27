@@ -42,15 +42,19 @@ class TodoController extends Controller
     {
         $input = $request->all();
         $input["user_id"] = Auth::user()->id;
-        $validator = Validator::make($input, [
-            'task' => 'required|max:255',
+        // $validator = Validator::make($input, [
+        //     'task' => 'required|max:255',
 
+        // ]);
+
+        // if($validator->fails()){
+        //     // return view("dashboard");
+        // }
+        $request->validate([
+            'task' => 'required|max:255'
         ]);
-        if($validator->fails()){
-            // return view("dashboard");
-        }
         Todo::create($input);
-        return redirect('dashboard');
+        return redirect('dashboard')->with('success', "TODO created successfully!");
     }
 
     /**
@@ -90,7 +94,7 @@ class TodoController extends Controller
         return redirect('dashboard')->with('success', "TODO updated successfully!");
     }
 
-    
+
     public function delete($id){
         $todo = Todo::find($id);
         $todo->delete();

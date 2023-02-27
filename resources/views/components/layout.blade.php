@@ -39,6 +39,7 @@
             </div>
         </div>
     </nav>
+    
  {{$slot}}
 </body>
 </html>

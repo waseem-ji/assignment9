@@ -1,5 +1,6 @@
 <x-layout>
     <section class="vh-100">
+
     <div class="container py-5 h-100">
       <div class="row d-flex justify-content-center align-items-center h-100">
         <div class="col">
@@ -14,7 +15,7 @@
               <div class="pb-2">
                 <div class="card">
                   <div class="card-body">
-                    <div class="d-flex flex-row align-items-center">
+                    <div class="d-flex flex-row align-items-center ">
                         <form action="/todos" method="POST">
                             @csrf
                             <div class="d-flex justify-content-space">
@@ -25,6 +26,12 @@
                                     <div>
                                         <button type="submit" class="btn btn-primary">Add</button>
                                     </div>
+                                    <div class="d-flex">
+                                        <p class="p-2 flex-fill" >
+                                            <x-alert />
+                                        </p>
+                                    </div>
+
                             </div>
                         </form>
                     </div>
